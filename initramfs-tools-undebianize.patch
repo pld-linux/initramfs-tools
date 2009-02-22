@@ -1,0 +1,231 @@
+diff -urN initramfs-tools-0.93.orig/hook-functions initramfs-tools-0.93/hook-functions
+--- initramfs-tools-0.93.orig/hook-functions	2009-02-17 18:22:54.000000000 +0100
++++ initramfs-tools-0.93/hook-functions	2009-02-22 19:18:13.000000000 +0100
+@@ -445,13 +445,13 @@
+ # minimal supported kernel version
+ check_minkver()
+ {
+-	local curversion initdir DPKG_ARCH minversion cm_x tmp
++	local curversion initdir ARCH minversion cm_x tmp
+ 
+ 	curversion="${1}"
+ 	initdir="${2}"
+ 	if [ -z "${initdir}" ]; then
+-		DPKG_ARCH=$(dpkg --print-installation-architecture)
+-		case ${DPKG_ARCH} in
++		ARCH=$(uname -m)
++		case ${ARCH} in
+ 			ia64|hppa)
+ 				minversion="2.6.15"
+ 			;;
+@@ -459,8 +459,8 @@
+ 				minversion="2.6.12"
+ 			;;
+ 		esac
+-		if dpkg --compare-versions "${curversion}" lt "${minversion}"; then
+-			echo "W: kernel ${curversion} too old for initramfs on ${DPKG_ARCH}" >&2
++		if expr "${curversion}" '<' "${minversion}" >/dev/null 2>/dev/null; then
++			echo "W: kernel ${curversion} too old for initramfs on ${ARCH}" >&2
+ 			echo "W: not generating requested initramfs for kernel ${curversion}" >&2
+ 			exit 2
+ 		fi
+@@ -473,7 +473,7 @@
+ 		minver=$(sed '/^MINKVER=/!d;$!d;s/^MINKVER=//;s/[[:space:]]*$//' "${initdir}/${cm_x}")
+ 		if [ -z "${tmp}" ]; then
+ 			continue
+-		elif dpkg --compare-versions "${curversion}" lt "${minver}"; then
++		elif expr "${curversion}" '<' "${minver}" >/dev/null 2>/dev/null; then
+ 			echo "W: ${cm_x} hook script requires at least kernel version ${minver}" >&2
+ 			echo "W: not generating requested initramfs for kernel ${curversion}" >&2
+ 			exit 2
+diff -urN initramfs-tools-0.93.orig/hooks/thermal initramfs-tools-0.93/hooks/thermal
+--- initramfs-tools-0.93.orig/hooks/thermal	2007-12-25 17:03:57.000000000 +0100
++++ initramfs-tools-0.93/hooks/thermal	2009-02-22 18:35:32.000000000 +0100
+@@ -19,7 +19,7 @@
+ 
+ . /usr/share/initramfs-tools/hook-functions
+ 
+-case "$DPKG_ARCH" in
++case "$ARCH" in
+ # copy the right modules
+ powerpc|ppc64)
+ 	manual_add_modules therm_pm72
+@@ -36,7 +36,7 @@
+ 	manual_add_modules windfarm_smu_sensors
+ 	manual_add_modules i2c-powermac
+ 	;;
+-i386|amd64|ia64)
++i?86|athlon|amd64|x86?64|ia64)
+ 	manual_add_modules fan
+ 	manual_add_modules thermal
+ 	;;
+diff -urN initramfs-tools-0.93.orig/init initramfs-tools-0.93/init
+--- initramfs-tools-0.93.orig/init	2009-02-17 18:06:31.000000000 +0100
++++ initramfs-tools-0.93/init	2009-02-22 18:37:00.000000000 +0100
+@@ -23,8 +23,8 @@
+ > /dev/.initramfs-tools
+ mkdir /dev/.initramfs
+ 
+-# Export the dpkg architecture
+-export DPKG_ARCH=
++# Export the architecture
++export ARCH=
+ . /conf/arch.conf
+ 
+ # Set modprobe env
+@@ -237,7 +237,7 @@
+ # (keep init, rootmnt)
+ unset debug
+ unset MODPROBE_OPTIONS
+-unset DPKG_ARCH
++unset ARCH
+ unset ROOTFLAGS
+ unset ROOTFSTYPE
+ unset ROOTDELAY
+diff -urN initramfs-tools-0.93.orig/initramfs-tools.8 initramfs-tools-0.93/initramfs-tools.8
+--- initramfs-tools-0.93.orig/initramfs-tools.8	2009-02-17 16:42:31.000000000 +0100
++++ initramfs-tools-0.93/initramfs-tools.8	2009-02-22 18:21:10.000000000 +0100
+@@ -242,7 +242,7 @@
+ \fB\fI DESTDIR
+ is the root path of the newly build initramfs.
+ .TP
+-\fB\fI DPKG_ARCH
++\fB\fI ARCH
+ allows arch specific hook additions.
+ .TP
+ \fB\fI verbose
+@@ -494,7 +494,7 @@
+ \fB\fI ROOTDELAY, ROOTFLAGS, ROOTFSTYPE
+ correponds to the rootdelay, rootflags or rootfstype boot option.
+ .TP
+-\fB\fI DPKG_ARCH
++\fB\fI ARCH
+ allows arch specific boot actions.
+ .TP
+ \fB\fI blacklist, panic, quiet, resume, noresume, resume_offset
+diff -urN initramfs-tools-0.93.orig/mkinitramfs initramfs-tools-0.93/mkinitramfs
+--- initramfs-tools-0.93.orig/mkinitramfs	2009-02-17 15:56:33.000000000 +0100
++++ initramfs-tools-0.93/mkinitramfs	2009-02-22 18:40:45.000000000 +0100
+@@ -63,7 +63,7 @@
+ EXTRA_CONF=''
+ for i in /usr/share/initramfs-tools/conf.d/* ${CONFDIR}/conf.d/*; do
+ 	EXTRA_CONF="${EXTRA_CONF} $(basename $i \
+-		| grep '^[[:alnum:]][[:alnum:]\._-]*$' | grep -v '\.dpkg-.*$')";
++		| grep '^[[:alnum:]][[:alnum:]\._-]*$' | grep -v '\.dpkg-.*$' | grep -v '\.rpm\(save\|new\|orig\)$')";
+ done
+ # FIXME: deprecated those settings on mkinitramfs run
+ #        these conf dirs are for boot scripts and land on initramfs
+@@ -141,7 +141,7 @@
+ DESTDIR="$(mktemp -t -d mkinitramfs_XXXXXX)" || exit 1
+ __TMPCPIOGZ="$(mktemp -t mkinitramfs-OL_XXXXXX)" || exit 1
+ 
+-DPKG_ARCH=`dpkg --print-installation-architecture`
++ARCH=`uname -m`
+ 
+ # Export environment for hook scripts.
+ #
+@@ -149,7 +149,7 @@
+ export version
+ export CONFDIR
+ export DESTDIR
+-export DPKG_ARCH
++export ARCH
+ export verbose
+ export KEYMAP
+ export MODULES
+@@ -215,7 +215,7 @@
+ 	cp -p "${CONFDIR}/scripts/${b}" "${DESTDIR}/scripts/$(dirname "${b}")/"
+ done
+ 
+-echo "DPKG_ARCH=${DPKG_ARCH}" > ${DESTDIR}/conf/arch.conf
++echo "ARCH=${ARCH}" > ${DESTDIR}/conf/arch.conf
+ cp -p "${CONFDIR}/initramfs.conf" ${DESTDIR}/conf
+ for i in ${EXTRA_CONF}; do
+ 	if [ -e "${CONFDIR}/conf.d/${i}" ]; then
+@@ -253,7 +253,7 @@
+ cp -a /etc/modprobe.d/* "${DESTDIR}/etc/modprobe.d/"
+ 
+ # workaround: libgcc always needed on old-abi arm
+-if [ "$DPKG_ARCH" = arm ] || [ "$DPKG_ARCH" = armeb ]; then
++if [ "$ARCH" = arm ] || [ "$ARCH" = armeb ]; then
+ 	cp -a /lib/libgcc_s.so.1 "${DESTDIR}/lib/"
+ fi
+ 
+diff -urN initramfs-tools-0.93.orig/scripts/init-premount/thermal initramfs-tools-0.93/scripts/init-premount/thermal
+--- initramfs-tools-0.93.orig/scripts/init-premount/thermal	2009-02-13 17:20:58.000000000 +0100
++++ initramfs-tools-0.93/scripts/init-premount/thermal	2009-02-22 18:34:46.000000000 +0100
+@@ -15,7 +15,7 @@
+ 	;;
+ esac
+ 
+-case "$DPKG_ARCH" in
++case "$ARCH" in
+ # load the right modules
+ powerpc|ppc64)
+ 	modprobe i2c-powermac
+@@ -30,7 +30,7 @@
+ 	modprobe windfarm_smu_sat
+ 	modprobe windfarm_smu_sensors
+ 	;;
+-i386|amd64|ia64)
++i?86|athlon|amd64|x86?64|ia64)
+ 	for x in $(cat /proc/cmdline); do
+ 		case ${x} in
+ 		acpi=off)
+diff -urN initramfs-tools-0.93.orig/update-initramfs initramfs-tools-0.93/update-initramfs
+--- initramfs-tools-0.93.orig/update-initramfs	2009-01-11 23:56:02.000000000 +0100
++++ initramfs-tools-0.93/update-initramfs	2009-02-22 19:17:10.000000000 +0100
+@@ -4,7 +4,6 @@
+ BOOTDIR=/boot
+ CONF=/etc/initramfs-tools/update-initramfs.conf
+ KPKGCONF=/etc/kernel-img.conf
+-USETRIGGERS=true
+ mode=""
+ version=""
+ 
+@@ -12,18 +11,6 @@
+ 
+ [ -r ${CONF} ] && . ${CONF}
+ 
+-if	   $USETRIGGERS						\
+-	&& [ x"$DPKG_MAINTSCRIPT_PACKAGE" != x ]		\
+-	&& [ $# = 1 ]	 					\
+-	&& [ x"$1" = x-u ]					\
+-	&& dpkg-trigger --check-supported 2>/dev/null
+-then
+-	if dpkg-trigger --no-await update-initramfs; then
+-		echo "update-initramfs: deferring update (trigger activated)"
+-		exit 0
+-	fi
+-fi
+-
+ usage()
+ {
+ 	if [ -n "${1}" ]; then
+@@ -98,7 +85,7 @@
+ backup_initramfs()
+ {
+ 	[ ! -r "${initramfs}" ] && return 0
+-	initramfs_bak="${initramfs}.dpkg-bak"
++	initramfs_bak="${initramfs}.bak"
+ 	[ -r "${initramfs_bak}" ] && rm -f "${initramfs_bak}"
+ 	ln -f "${initramfs}" "${initramfs_bak}" \
+ 		|| cp -a "${initramfs}" "${initramfs_bak}"
+@@ -108,7 +95,7 @@
+ # keep booted initramfs
+ backup_booted_initramfs()
+ {
+-	initramfs_bak="${initramfs}.dpkg-bak"
++	initramfs_bak="${initramfs}.bak"
+ 
+ 	# first time run thus no backup
+ 	[ ! -r "${initramfs_bak}" ] && return 0
+@@ -313,7 +300,7 @@
+ 		fi
+ 		worklist=""
+ 		for gsv_i in $version_list; do
+-			if dpkg --compare-versions "${gsv_x}" '>' "${gsv_i}"; then
++			if expr "${gsv_x}" '>' "${gsv_i}" >/dev/null 2>/dev/null; then
+ 				worklist="${worklist} ${gsv_x} ${gsv_i}"
+ 				gsv_x=""
+ 			else
