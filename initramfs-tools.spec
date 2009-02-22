@@ -34,14 +34,15 @@ Requires:	util-linux-ng
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-This package contains tools to create and boot an initramfs for
-packaged 2.6 Linux kernel. The initramfs is a gzipped cpio archive.
-At boot time, the kernel unpacks that archive into RAM, mounts and
-uses it as initial root file system. The mounting of the real root
-file system occurs in early user space. klibc provides utilities to
-setup root. Having the root on EVMS, MD, LVM2, LUKS or NFS is also
-supported. Any boot loader with initrd support is able to load an
-initramfs archive.
+initramfs-tools is an hookable initramfs generator.
+It can boot on NFS, LVM2, md, LUKS, dmraid, oldstyle devices, ...
+The generated initramfs is generic, but can explicitly be tuned
+for small. It is actively deployed in Debian and Ubuntu.
+It is written in POSIX shell. It has an "end-user" friendly
+invocation with update-initramfs and the low level mkinitramfs.
+klibc is used for minimal initramfs. The initramfs comes together
+with a rescue shell. It is possible to ssh into it.
+run-init nukes initramfs, remounts /root, chroots, spawns init.
 
 #%description -l pl.UTF-8
 
