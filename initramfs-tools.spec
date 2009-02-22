@@ -3,6 +3,7 @@
 #	- pl desc
 #	- clean up Requires
 #	- our klibc is really messed up
+#	- undebianize
 #
 Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
