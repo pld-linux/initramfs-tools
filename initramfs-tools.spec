@@ -2,7 +2,6 @@
 # TODO:
 #	- pl desc
 #	- clean up Requires
-#	- our klibc is really messed up
 #	- undebianize
 #
 Summary:	Tools for generating an initramfs
@@ -25,8 +24,8 @@ Requires:	findutils
 Requires:	glibc-misc
 Requires:	grep
 Requires:	gzip
-Requires:	klibc
-Requires:	klibc-utils-shared
+Requires:	klibc >= 1.5.15-2
+Requires:	klibc-utils-shared >= 1.5.15-2
 #Requires:	lvm2
 Requires:	module-init-tools
 Requires:	mount
