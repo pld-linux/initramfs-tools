@@ -1,6 +1,5 @@
 #
 # TODO:
-#	- pl desc
 #	- clean up Requires
 #
 Summary:	Tools for generating an initramfs
@@ -37,14 +36,21 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 initramfs-tools is an hookable initramfs generator.
 It can boot on NFS, LVM2, md, LUKS, dmraid, oldstyle devices, ...
 The generated initramfs is generic, but can explicitly be tuned
-for small. It is actively deployed in Debian and Ubuntu.
-It is written in POSIX shell. It has an "end-user" friendly
+for small.
+It is written in POSIX shell, has an "end-user" friendly
 invocation with update-initramfs and the low level mkinitramfs.
-klibc is used for minimal initramfs. The initramfs comes together
-with a rescue shell. It is possible to ssh into it.
-run-init nukes initramfs, remounts /root, chroots, spawns init.
+The initramfs uses klibc, comes together with a rescue shell.
+It is possible to ssh into it.
 
-#%description -l pl.UTF-8
+%description -l pl.UTF-8
+initramfs-tools to generator initramfs.
+Umożliwia bootowanie ze zwykłych urządzeń, LVM2, md, LUKS, dmraid
+czy NFS. Utworzony initramfs jest ogólny, ale można go dostroić
+tak aby był minimalny.
+initramfs-tools jest napisany w shellu zgodnym ze standardem POSIX.
+Można go wywoływać poprzez przyjazny dla użytkownika update-initramfs
+i niskopoziomowy mkinitramfs. Utworzony initramfs używa klibc, posiada
+wbudowany ratunkowy shell do którego można zalogować się przez ssh.
 
 %prep
 %setup -q
