@@ -2,7 +2,6 @@
 # TODO:
 #	- pl desc
 #	- clean up Requires
-#	- undebianize
 #
 Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
@@ -13,6 +12,7 @@ License:	Public Domain
 Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
 # Source0-md5:	97b6188728c9ecacd21e9b4f06a3e86a
+Patch0:		%{name}-undebianize.patch
 URL:		http://git.debian.org/?p=kernel/initramfs-tools.git;a=shortlog
 # Probably gawk
 Requires:	awk
@@ -48,6 +48,7 @@ run-init nukes initramfs, remounts /root, chroots, spawns init.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 
