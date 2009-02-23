@@ -1,0 +1,159 @@
+diff -ur initramfs-tools-0.93/hook-functions initramfs-tools-0.93-nobb/hook-functions
+--- initramfs-tools-0.93/hook-functions	2009-02-23 17:10:14.000000000 +0100
++++ initramfs-tools-0.93-nobb/hook-functions	2009-02-23 17:12:20.000000000 +0100
+@@ -43,7 +43,7 @@
+ {
+ 	local mam_x firmwares firmware
+ 
+-	for mam_x in $(modprobe --set-version="${version}" --ignore-install \
++	for mam_x in $(/sbin/modprobe --set-version="${version}" --ignore-install \
+ 	--show-depends "${1}" 2>/dev/null | awk '/^insmod/ { print $2 }'); do
+ 		# Prune duplicates
+ 		if [ -e "${DESTDIR}/${mam_x}" ]; then
+diff -ur initramfs-tools-0.93/init initramfs-tools-0.93-nobb/init
+--- initramfs-tools-0.93/init	2009-02-23 17:10:14.000000000 +0100
++++ initramfs-tools-0.93-nobb/init	2009-02-23 17:10:57.000000000 +0100
+@@ -177,7 +177,7 @@
+ 	export noresume
+ fi
+ 
+-depmod -a
++/sbin/depmod -a
+ maybe_break top
+ 
+ # Don't do log messages here to avoid confusing usplash
+diff -ur initramfs-tools-0.93/mkinitramfs initramfs-tools-0.93-nobb/mkinitramfs
+--- initramfs-tools-0.93/mkinitramfs	2009-02-23 17:10:14.000000000 +0100
++++ initramfs-tools-0.93-nobb/mkinitramfs	2009-02-23 17:11:07.000000000 +0100
+@@ -135,7 +135,7 @@
+ 	exit 1
+ fi
+ if [ ! -e "${MODULESDIR}/modules.dep" ]; then
+-	depmod ${version}
++	/sbin/depmod ${version}
+ fi
+ 
+ DESTDIR="$(mktemp -t -d mkinitramfs_XXXXXX)" || exit 1
+diff -ur initramfs-tools-0.93/scripts/functions initramfs-tools-0.93-nobb/scripts/functions
+--- initramfs-tools-0.93/scripts/functions	2009-01-07 15:14:37.000000000 +0100
++++ initramfs-tools-0.93-nobb/scripts/functions	2009-02-23 17:13:03.000000000 +0100
+@@ -47,8 +47,8 @@
+ 		sleep ${panic}
+ 		reboot
+ 	fi
+-	modprobe i8042
+-	modprobe atkbd
++	/sbin/modprobe i8042
++	/sbin/modprobe atkbd
+ 	echo $@
+ 	PS1='(initramfs) ' /bin/sh -i </dev/console >/dev/console 2>&1
+ }
+@@ -224,7 +224,7 @@
+ 			if [ "$com" = "#" ]; then
+ 				continue
+ 			fi
+-			modprobe $m
++			/sbin/modprobe $m
+ 		done
+ 	fi
+ }
+diff -ur initramfs-tools-0.93/scripts/init-premount/thermal initramfs-tools-0.93-nobb/scripts/init-premount/thermal
+--- initramfs-tools-0.93/scripts/init-premount/thermal	2009-02-23 17:10:14.000000000 +0100
++++ initramfs-tools-0.93-nobb/scripts/init-premount/thermal	2009-02-23 17:14:07.000000000 +0100
+@@ -18,17 +18,17 @@
+ case "$ARCH" in
+ # load the right modules
+ powerpc|ppc64)
+-	modprobe i2c-powermac
+-	modprobe therm_pm72
+-	modprobe windfarm_cpufreq_clamp
+-	modprobe windfarm_lm75_sensor
+-	modprobe windfarm_max6690_sensor
+-	modprobe windfarm_pm112
+-	modprobe windfarm_pm81
+-	modprobe windfarm_pm91
+-	modprobe windfarm_smu_controls
+-	modprobe windfarm_smu_sat
+-	modprobe windfarm_smu_sensors
++	/sbin/modprobe i2c-powermac
++	/sbin/modprobe therm_pm72
++	/sbin/modprobe windfarm_cpufreq_clamp
++	/sbin/modprobe windfarm_lm75_sensor
++	/sbin/modprobe windfarm_max6690_sensor
++	/sbin/modprobe windfarm_pm112
++	/sbin/modprobe windfarm_pm81
++	/sbin/modprobe windfarm_pm91
++	/sbin/modprobe windfarm_smu_controls
++	/sbin/modprobe windfarm_smu_sat
++	/sbin/modprobe windfarm_smu_sensors
+ 	;;
+ i?86|athlon|amd64|x86?64|ia64)
+ 	for x in $(cat /proc/cmdline); do
+@@ -38,7 +38,7 @@
+ 			;;
+ 		esac
+ 	done
+-	modprobe fan
+-	modprobe thermal
++	/sbin/modprobe fan
++	/sbin/modprobe thermal
+ 	;;
+ esac
+diff -ur initramfs-tools-0.93/scripts/init-top/all_generic_ide initramfs-tools-0.93-nobb/scripts/init-top/all_generic_ide
+--- initramfs-tools-0.93/scripts/init-top/all_generic_ide	2008-12-18 00:45:21.000000000 +0100
++++ initramfs-tools-0.93-nobb/scripts/init-top/all_generic_ide	2009-02-23 17:14:15.000000000 +0100
+@@ -16,11 +16,11 @@
+ for x in $(cat /proc/cmdline); do
+ 	case ${x} in
+ 	all_generic_ide)
+-		modprobe ide-generic
++		/sbin/modprobe ide-generic
+ 		;;
+ 	all_generic_ide=*)
+ 		if [ ${x#all_generic_ide=} ]; then
+-			modprobe ide-generic
++			/sbin/modprobe ide-generic
+ 		fi
+ 		;;
+ 	esac
+diff -ur initramfs-tools-0.93/scripts/init-top/framebuffer initramfs-tools-0.93-nobb/scripts/init-top/framebuffer
+--- initramfs-tools-0.93/scripts/init-top/framebuffer	2008-12-15 11:31:06.000000000 +0100
++++ initramfs-tools-0.93-nobb/scripts/init-top/framebuffer	2009-02-23 17:14:22.000000000 +0100
+@@ -87,8 +87,8 @@
+ esac
+ 
+ if [ -n "${FB}" ]; then
+-	modprobe fbcon
+-	modprobe ${FB} ${OPTS}
++	/sbin/modprobe fbcon
++	/sbin/modprobe ${FB} ${OPTS}
+ fi
+ 
+ if [ -e /proc/fb ]; then
+diff -ur initramfs-tools-0.93/scripts/local initramfs-tools-0.93-nobb/scripts/local
+--- initramfs-tools-0.93/scripts/local	2009-02-17 15:25:56.000000000 +0100
++++ initramfs-tools-0.93-nobb/scripts/local	2009-02-23 17:13:21.000000000 +0100
+@@ -123,7 +123,7 @@
+ 	fi
+ 
+ 	# FIXME This has no error checking
+-	modprobe ${FSTYPE}
++	/sbin/modprobe ${FSTYPE}
+ 
+ 	# FIXME This has no error checking
+ 	# Mount root
+diff -ur initramfs-tools-0.93/scripts/nfs initramfs-tools-0.93-nobb/scripts/nfs
+--- initramfs-tools-0.93/scripts/nfs	2008-08-13 15:23:44.000000000 +0200
++++ initramfs-tools-0.93-nobb/scripts/nfs	2009-02-23 17:13:31.000000000 +0100
+@@ -55,9 +55,9 @@
+ 	run_scripts /scripts/nfs-top
+ 	[ "$quiet" != "y" ] && log_end_msg
+ 
+-	modprobe nfs
++	/sbin/modprobe nfs
+ 	# For DHCP
+-	modprobe af_packet
++	/sbin/modprobe af_packet
+ 
+ 	wait_for_udev 10
+ 

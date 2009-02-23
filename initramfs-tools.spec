@@ -12,6 +12,7 @@ Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
 # Source0-md5:	97b6188728c9ecacd21e9b4f06a3e86a
 Patch0:		%{name}-undebianize.patch
+Patch1:		%{name}-nobb.patch
 URL:		http://git.debian.org/?p=kernel/initramfs-tools.git;a=shortlog
 # Probably gawk
 Requires:	awk
@@ -23,8 +24,8 @@ Requires:	findutils
 Requires:	glibc-misc
 Requires:	grep
 Requires:	gzip
-Requires:	klibc >= 1.5.15-2
-Requires:	klibc-utils-shared >= 1.5.15-2
+Requires:	klibc >= 1.5.15-3
+Requires:	klibc-utils-shared >= 1.5.15-3
 #Requires:	lvm2
 Requires:	module-init-tools
 Requires:	mount
@@ -55,6 +56,7 @@ wbudowany ratunkowy shell do którego można zalogować się przez ssh.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 
