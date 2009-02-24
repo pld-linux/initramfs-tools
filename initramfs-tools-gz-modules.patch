@@ -1,11 +1,51 @@
---- initramfs-tools-0.93/hook-functions~	2009-02-23 17:16:46.000000000 +0100
-+++ initramfs-tools-0.93/hook-functions	2009-02-24 15:44:23.000000000 +0100
-@@ -177,7 +177,7 @@
+--- initramfs-tools-0.93/hook-functions.orig	2009-02-23 17:16:46.000000000 +0100
++++ initramfs-tools-0.93/hook-functions	2009-02-24 16:33:40.000000000 +0100
+@@ -41,7 +41,7 @@
+ # Add dependent modules + eventual firmware
+ manual_add_modules()
+ {
+-	local mam_x firmwares firmware
++	local mam_x mam_xbn firmwares firmware
+ 
+ 	for mam_x in $(/sbin/modprobe --set-version="${version}" --ignore-install \
+ 	--show-depends "${1}" 2>/dev/null | awk '/^insmod/ { print $2 }'); do
+@@ -68,12 +68,14 @@
+ 
+ 			# Only print warning for missing fw of loaded module
+ 			# or forced loaded module
++			mam_xbn=$(basename "${mam_x}" .ko)
++			mam_xbn=${mam_xbn%%.ko*}
+ 			if [ ! -e "/lib/firmware/${firmware}" ]; then
+-				if grep -q "^$(basename "${mam_x}" .ko)" \
++				if grep -q "^${mam_xbn}" \
+ 				/proc/modules \
+-				|| grep -q "^$(basename "${mam_x}" .ko)" \
++				|| grep -q "^${mam_xbn}" \
+ 				"${CONFDIR}/modules"; then
+-					echo "W: Possible missing firmware /lib/firmware/${firmware} for module $(basename ${mam_x} .ko)" >&2
++					echo "W: Possible missing firmware /lib/firmware/${firmware} for module ${mam_xbn}" >&2
+ 				fi
+ 				continue
+ 			fi
+@@ -169,7 +171,7 @@
+ # Copy entire subtrees to the initramfs
+ copy_modules_dir()
+ {
+-	local x_mod
++	local x_mod mod_bn
+ 
+ 	if ! [ -d "${MODULESDIR}/${1}" ]; then
+ 		return;
+@@ -177,8 +179,10 @@
  	if [ "${verbose}" = "y" ]; then
  		echo "Copying module directory ${1}"
  	fi
 -	for x_mod in $(find "${MODULESDIR}/${1}" -name '*.ko' -print); do
+-		manual_add_modules $(basename ${x_mod} .ko)
 +	for x_mod in $(find "${MODULESDIR}/${1}" \( -name '*.ko' -o -name '*.ko.gz' \) -print); do
- 		manual_add_modules $(basename ${x_mod} .ko)
++		mod_bn=$(basename "${x_mod}" .ko)
++		mod_bn=${mod_bn%%.ko*}
++		manual_add_modules ${mod_bn}
  	done
  }
+ 
