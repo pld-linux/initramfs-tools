@@ -6,17 +6,18 @@ Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
 Name:		initramfs-tools
 Version:	0.93
-Release:	0.2
+Release:	0.4
 License:	Public Domain
 Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
 # Source0-md5:	97b6188728c9ecacd21e9b4f06a3e86a
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-nobb.patch
+Patch2:		%{name}-gz-modules.patch
 URL:		http://git.debian.org/?p=kernel/initramfs-tools.git;a=shortlog
 # Probably gawk
 Requires:	awk
-Requires:	busybox
+Requires:	busybox >= 1.12.4-2
 Requires:	coreutils
 Requires:	cpio
 #Requires:	cryptsetup-luks
@@ -29,7 +30,7 @@ Requires:	klibc-utils-shared >= 1.5.15-3
 #Requires:	lvm2
 Requires:	module-init-tools
 Requires:	mount
-Requires:	udev-core
+Requires:	udev-initramfs
 Requires:	util-linux-ng
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -57,6 +58,7 @@ wbudowany ratunkowy shell do którego można zalogować się przez ssh.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 
