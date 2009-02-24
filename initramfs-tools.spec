@@ -6,7 +6,7 @@ Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
 Name:		initramfs-tools
 Version:	0.93
-Release:	0.5
+Release:	0.6
 License:	Public Domain
 Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
@@ -17,7 +17,7 @@ Patch2:		%{name}-gz-modules.patch
 URL:		http://git.debian.org/?p=kernel/initramfs-tools.git;a=shortlog
 # Probably gawk
 Requires:	awk
-Requires:	busybox >= 1.12.4-2
+Requires:	busybox >= 1.12.4-3
 Requires:	coreutils
 Requires:	cpio
 #Requires:	cryptsetup-luks
