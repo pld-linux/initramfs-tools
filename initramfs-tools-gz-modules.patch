@@ -1,0 +1,11 @@
+--- initramfs-tools-0.93/hook-functions~	2009-02-23 17:16:46.000000000 +0100
++++ initramfs-tools-0.93/hook-functions	2009-02-24 15:44:23.000000000 +0100
+@@ -177,7 +177,7 @@
+ 	if [ "${verbose}" = "y" ]; then
+ 		echo "Copying module directory ${1}"
+ 	fi
+-	for x_mod in $(find "${MODULESDIR}/${1}" -name '*.ko' -print); do
++	for x_mod in $(find "${MODULESDIR}/${1}" \( -name '*.ko' -o -name '*.ko.gz' \) -print); do
+ 		manual_add_modules $(basename ${x_mod} .ko)
+ 	done
+ }
