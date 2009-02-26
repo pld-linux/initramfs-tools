@@ -1,6 +1,7 @@
 #
 # TODO:
-#	- clean up Requires
+#	- clean up Requires (still)
+#	- add support for initrd static programs
 #
 Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
