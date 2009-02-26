@@ -6,7 +6,7 @@ Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
 Name:		initramfs-tools
 Version:	0.93
-Release:	0.6
+Release:	0.7
 License:	Public Domain
 Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
@@ -20,18 +20,23 @@ Requires:	awk
 Requires:	busybox >= 1.12.4-3
 Requires:	coreutils
 Requires:	cpio
-#Requires:	cryptsetup-luks
 Requires:	findutils
 Requires:	glibc-misc
 Requires:	grep
 Requires:	gzip
 Requires:	klibc >= 1.5.15-3
 Requires:	klibc-utils-shared >= 1.5.15-3
-#Requires:	lvm2
 Requires:	module-init-tools
 Requires:	mount
 Requires:	udev-initramfs
 Requires:	util-linux-ng
+Suggests:	cryptsetup-luks-initramfs
+Suggests:	dmraid-initramfs
+Suggests:	lvm2-initramfs
+Suggests:	mdadm-initramfs
+Suggests:	multipath-tools-initramfs
+Suggests:	openct-initramfs
+Suggests:	opensc-initramfs
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
