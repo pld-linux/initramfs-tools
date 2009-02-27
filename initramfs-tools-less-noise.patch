@@ -1,0 +1,19 @@
+--- initramfs-tools-0.93/scripts/functions~	2009-02-27 20:05:45.000000000 +0100
++++ initramfs-tools-0.93/scripts/functions	2009-02-27 20:09:26.000000000 +0100
+@@ -26,7 +26,7 @@
+ 	if [ -x /sbin/usplash_write ]; then
+ 		/sbin/usplash_write "TEXT $@"
+ 	fi
+-	_log_msg "Begin: $@ ... "
++	_log_msg "$@ ...\n"
+ }
+ 
+ log_end_msg()
+@@ -34,7 +34,6 @@
+ 	if [ -x /sbin/usplash_write ]; then
+ 		/sbin/usplash_write "SUCCESS ok"
+ 	fi
+-	_log_msg "done.\n"
+ }
+ 
+ panic()
