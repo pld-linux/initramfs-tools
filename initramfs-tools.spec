@@ -33,7 +33,7 @@ Requires:	mount
 Requires:	udev-initramfs
 Requires:	util-linux-ng
 Suggests:	cryptsetup-luks-initramfs
-Suggests:	dmraid-initramfs
+Suggests:	dmraid-initramfs >= 1.0.0-0.rc15.3
 Suggests:	lvm2-initramfs
 Suggests:	mdadm-initramfs
 Suggests:	multipath-tools-initramfs
