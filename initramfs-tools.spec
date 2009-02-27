@@ -7,7 +7,7 @@ Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
 Name:		initramfs-tools
 Version:	0.93
-Release:	0.8
+Release:	0.9
 License:	Public Domain
 Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
@@ -15,6 +15,7 @@ Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{v
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-nobb.patch
 Patch2:		%{name}-gz-modules.patch
+Patch3:		%{name}-less-noise.patch
 URL:		http://git.debian.org/?p=kernel/initramfs-tools.git;a=shortlog
 # Probably gawk
 Requires:	awk
@@ -65,6 +66,7 @@ wbudowany ratunkowy shell do którego można zalogować się przez ssh.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 
