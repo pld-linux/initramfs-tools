@@ -7,7 +7,7 @@ Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
 Name:		initramfs-tools
 Version:	0.93
-Release:	0.7
+Release:	0.8
 License:	Public Domain
 Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
@@ -71,9 +71,10 @@ wbudowany ratunkowy shell do którego można zalogować się przez ssh.
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/initramfs-tools/scripts/{init-bottom,init-premount,init-top,local-bottom,local-premount,local-top,nfs-bottom,nfs-premount,nfs-top}
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/initramfs-tools/{hooks,/conf.d}
-install -d $RPM_BUILD_ROOT%{_datadir}/initramfs-tools/{conf.d,hooksconf.d,modules.d}
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/initramfs-tools/scripts/{init,local,nfs}-{bottom,premount,top}
+install -d $RPM_BUILD_ROOT%{_datadir}/initramfs-tools/scripts/{init,local,nfs}-{bottom,premount,top}
+install -d $RPM_BUILD_ROOT%{_datadir}/initramfs-tools/{conf.d,conf-hooks.d,modules.d}
 install -d $RPM_BUILD_ROOT/var/lib/initramfs-tools
 install -d $RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man{5,8}}
 
@@ -112,17 +113,23 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/initramfs-tools/conf.d
 %dir %{_datadir}/initramfs-tools/hooks
 %attr(755,root,root) %{_datadir}/initramfs-tools/hooks/*
-%dir %{_datadir}/initramfs-tools/hooksconf.d
+%dir %{_datadir}/initramfs-tools/conf-hooks.d
 %dir %{_datadir}/initramfs-tools/modules.d
 %dir %{_datadir}/initramfs-tools/scripts
+%dir %{_datadir}/initramfs-tools/scripts/init-bottom
+%dir %{_datadir}/initramfs-tools/scripts/init-premount
+%dir %{_datadir}/initramfs-tools/scripts/init-top
+%dir %{_datadir}/initramfs-tools/scripts/local-bottom
+%dir %{_datadir}/initramfs-tools/scripts/local-premount
+%dir %{_datadir}/initramfs-tools/scripts/local-top
+%dir %{_datadir}/initramfs-tools/scripts/nfs-bottom
+%dir %{_datadir}/initramfs-tools/scripts/nfs-premount
+%dir %{_datadir}/initramfs-tools/scripts/nfs-top
 %{_datadir}/initramfs-tools/scripts/functions
 %{_datadir}/initramfs-tools/scripts/local
 %{_datadir}/initramfs-tools/scripts/nfs
-%dir %{_datadir}/initramfs-tools/scripts/init-premount
 %attr(755,root,root) %{_datadir}/initramfs-tools/scripts/init-premount/*
-%dir %{_datadir}/initramfs-tools/scripts/init-top
 %attr(755,root,root) %{_datadir}/initramfs-tools/scripts/init-top/*
-%dir %{_datadir}/initramfs-tools/scripts/local-premount
 %attr(755,root,root) %{_datadir}/initramfs-tools/scripts/local-premount/*
 %attr(755,root,root) %{_sbindir}/*
 %dir /var/lib/initramfs-tools
