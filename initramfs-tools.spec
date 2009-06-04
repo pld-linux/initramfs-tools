@@ -8,7 +8,7 @@ Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
 Name:		initramfs-tools
 Version:	0.93
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
@@ -18,13 +18,14 @@ Patch1:		%{name}-nobb.patch
 Patch2:		%{name}-gz-modules.patch
 Patch3:		%{name}-less-noise.patch
 URL:		http://git.debian.org/?p=kernel/initramfs-tools.git;a=shortlog
+Requires:	/usr/bin/ldd
+Requires:	/usr/bin/locale
 # Probably gawk
 Requires:	awk
 Requires:	busybox >= 1.12.4-3
 Requires:	coreutils
 Requires:	cpio
 Requires:	findutils
-Requires:	glibc-misc
 Requires:	grep
 Requires:	gzip
 Requires:	klibc >= 1.5.15-3
