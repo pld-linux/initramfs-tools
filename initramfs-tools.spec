@@ -8,7 +8,7 @@ Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
 Name:		initramfs-tools
 Version:	0.93.4
-Release:	0.1
+Release:	1
 License:	Public Domain
 Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
@@ -69,6 +69,8 @@ wbudowany ratunkowy shell do którego można zalogować się przez ssh.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+
+sed -i -e 's|lib/klibc|%{_lib}/klibc|g' hook-functions mkinitramfs
 
 %build
 
