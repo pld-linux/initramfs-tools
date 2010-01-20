@@ -1,0 +1,55 @@
+--- initramfs-tools/conf/initramfs.conf~	2009-03-19 21:16:14.000000000 +0100
++++ initramfs-tools/conf/initramfs.conf	2010-01-20 17:29:01.818021234 +0100
+@@ -28,6 +28,14 @@
+ BUSYBOX=y
+ 
+ #
++# INITRDTOOLS: [ y | n ]
++#
++# Use dedicated programs for init(rd|ramfs) usage if available
++#
++
++INITRDTOOLS=y
++
++#
+ # KEYMAP: [ y | n ]
+ #
+ # Load a keymap during the initramfs stage.
+--- initramfs-tools/mkinitramfs~	2010-01-20 16:06:15.393838115 +0100
++++ initramfs-tools/mkinitramfs	2010-01-20 17:43:06.685958668 +0100
+@@ -10,6 +10,7 @@
+ errors_to="2>/dev/null"
+ # BUSYBOXDIR="/usr/lib/initramfs-tools/bin/"
+ BUSYBOXDIR="/bin"
++INITRDDIR="/usr/lib/initrd"
+ 
+ OPTIONS=`getopt -o d:ko:r:v -n "$0" -- "$@"`
+ 
+@@ -153,6 +154,7 @@
+ export verbose
+ export KEYMAP
+ export MODULES
++export INITRDDIR
+ 
+ # Private, used by 'catenate_cpiogz'.
+ export __TMPCPIOGZ
+--- initramfs-tools/hook-functions~	2010-01-20 16:06:15.392838170 +0100
++++ initramfs-tools/hook-functions	2010-01-20 17:44:33.865833165 +0100
+@@ -119,6 +119,17 @@
+ 	local libname dirname
+ 
+ 	source="${1}"
++	if [ "${INITRDTOOLS}" = "y" ] || [ "${INITRDTOOLS}" = "Y" ]; then
++		x="$source"
++		while [[ "$x" = */* ]]; do
++			[ -e "${INITRDDIR}/${x}" ] && break
++			x=${x#*/}
++		done
++		if [ -e "${INITRDDIR}/${x}" ]; then
++			source="${INITRDDIR}/${x}"
++		fi
++	fi
++		
+ 	if [ -n "${2}" ]; then
+ 		target="${2}"
+ 	else

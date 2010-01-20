@@ -1,14 +1,13 @@
 #
 # TODO:
 #	- clean up Requires (still)
-#	- add support for initrd static programs
 #	- test cryptroot, dmraid, mdadm, opensc, openct modules
 #
 Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
 Name:		initramfs-tools
 Version:	0.93.4
-Release:	1
+Release:	1.1
 License:	Public Domain
 Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
@@ -17,6 +16,7 @@ Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-nobb.patch
 Patch2:		%{name}-gz-modules.patch
 Patch3:		%{name}-less-noise.patch
+Patch4:		%{name}-initrdtools.patch
 URL:		http://git.debian.org/?p=kernel/initramfs-tools.git;a=shortlog
 Requires:	/usr/bin/ldd
 Requires:	/usr/bin/locale
@@ -69,8 +69,10 @@ wbudowany ratunkowy shell do którego można zalogować się przez ssh.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 sed -i -e 's|lib/klibc|%{_lib}/klibc|g' hook-functions mkinitramfs
+sed -i -e 's|INITRDDIR="/usr/lib/initrd"|INITRDDIR="/usr/%{_lib}/initrd"|' mkinitramfs
 
 %build
 
