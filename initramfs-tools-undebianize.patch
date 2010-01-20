@@ -1,6 +1,19 @@
 diff -urN initramfs-tools-0.93.orig/hook-functions initramfs-tools-0.93/hook-functions
 --- initramfs-tools-0.93.orig/hook-functions	2009-02-17 18:22:54.000000000 +0100
 +++ initramfs-tools-0.93/hook-functions	2009-02-22 19:18:13.000000000 +0100
+@@ -83,9 +83,9 @@
+ 				continue
+ 			fi
+ 
+-			if [ ! -e "${DESTDIR}/lib/udev/firmware.agent" ] \
+-			&& [ -e "/lib/udev/firmware.agent" ]; then
+-				copy_exec /lib/udev/firmware.agent
++			if [ ! -e "${DESTDIR}/lib/udev/firmware" ] \
++			&& [ -e "/lib/udev/firmware" ]; then
++				copy_exec /lib/udev/firmware
+ 			fi
+ 
+ 			if [ -e "/lib/firmware/${version}/${firmware}" ]; then
 @@ -445,12 +445,12 @@
  # minimal supported kernel version
  check_minkver()
