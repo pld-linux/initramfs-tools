@@ -120,13 +120,13 @@ diff -ur initramfs-tools-0.93/scripts/init-top/framebuffer initramfs-tools-0.93-
 --- initramfs-tools-0.93/scripts/init-top/framebuffer	2008-12-15 11:31:06.000000000 +0100
 +++ initramfs-tools-0.93-nobb/scripts/init-top/framebuffer	2009-02-23 17:14:22.000000000 +0100
 @@ -87,8 +87,8 @@
- esac
  
  if [ -n "${FB}" ]; then
--	modprobe fbcon
--	modprobe ${FB} ${OPTS}
-+	/sbin/modprobe fbcon
-+	/sbin/modprobe ${FB} ${OPTS}
+ 	unset MODPROBE_OPTIONS
+-	modprobe -q fbcon
+-	modprobe -q ${FB} ${OPTS}
++	/sbin/modprobe -q fbcon
++	/sbin/modprobe -q ${FB} ${OPTS}
  fi
  
  if [ -e /proc/fb ]; then

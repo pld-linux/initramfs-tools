@@ -9,15 +9,16 @@
  
  	for mam_x in $(/sbin/modprobe --set-version="${version}" --ignore-install \
  	--show-depends "${1}" 2>/dev/null | awk '/^insmod/ { print $2 }'); do
-@@ -68,12 +68,14 @@
+@@ -68,13 +68,15 @@
  
  			# Only print warning for missing fw of loaded module
  			# or forced loaded module
 +			mam_xbn=$(basename "${mam_x}" .ko)
 +			mam_xbn=${mam_xbn%%.ko*}
- 			if [ ! -e "/lib/firmware/${firmware}" ]; then
--				if grep -q "^$(basename "${mam_x}" .ko)" \
-+				if grep -q "^${mam_xbn}" \
+ 			if [ ! -e "/lib/firmware/${firmware}" ] \
+ 			&& [ ! -e "/lib/firmware/${version}/${firmware}" ]; then
+-				if grep -q "^$(basename "${mam_x}" .ko)[[:space:]]" \
++				if grep -q "^${mam_xbn}[[:space:]]" \
  				/proc/modules \
 -				|| grep -q "^$(basename "${mam_x}" .ko)" \
 +				|| grep -q "^${mam_xbn}" \

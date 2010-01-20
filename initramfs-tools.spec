@@ -7,12 +7,12 @@
 Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
 Name:		initramfs-tools
-Version:	0.93
-Release:	2
+Version:	0.93.4
+Release:	0.1
 License:	Public Domain
 Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
-# Source0-md5:	97b6188728c9ecacd21e9b4f06a3e86a
+# Source0-md5:	06415435a4ba85713ea50b34e212d73c
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-nobb.patch
 Patch2:		%{name}-gz-modules.patch
@@ -64,7 +64,7 @@ i niskopoziomowy mkinitramfs. Utworzony initramfs używa klibc, posiada
 wbudowany ratunkowy shell do którego można zalogować się przez ssh.
 
 %prep
-%setup -q
+%setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1

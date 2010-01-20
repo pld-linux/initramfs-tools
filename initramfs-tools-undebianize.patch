@@ -1,19 +1,17 @@
 diff -urN initramfs-tools-0.93.orig/hook-functions initramfs-tools-0.93/hook-functions
 --- initramfs-tools-0.93.orig/hook-functions	2009-02-17 18:22:54.000000000 +0100
 +++ initramfs-tools-0.93/hook-functions	2009-02-22 19:18:13.000000000 +0100
-@@ -445,13 +445,13 @@
+@@ -445,12 +445,12 @@
  # minimal supported kernel version
  check_minkver()
  {
 -	local curversion initdir DPKG_ARCH minversion cm_x tmp
-+	local curversion initdir ARCH minversion cm_x tmp
++	local curversion initdir minversion cm_x tmp
  
  	curversion="${1}"
  	initdir="${2}"
  	if [ -z "${initdir}" ]; then
--		DPKG_ARCH=$(dpkg --print-installation-architecture)
 -		case ${DPKG_ARCH} in
-+		ARCH=$(uname -m)
 +		case ${ARCH} in
  			ia64|hppa)
  				minversion="2.6.15"
@@ -119,7 +117,7 @@ diff -urN initramfs-tools-0.93.orig/mkinitramfs initramfs-tools-0.93/mkinitramfs
  DESTDIR="$(mktemp -t -d mkinitramfs_XXXXXX)" || exit 1
  __TMPCPIOGZ="$(mktemp -t mkinitramfs-OL_XXXXXX)" || exit 1
  
--DPKG_ARCH=`dpkg --print-installation-architecture`
+-DPKG_ARCH=`dpkg --print-architecture`
 +ARCH=`uname -m`
  
  # Export environment for hook scripts.
