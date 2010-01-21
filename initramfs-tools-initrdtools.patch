@@ -25,11 +25,12 @@
  
  OPTIONS=`getopt -o d:ko:r:v -n "$0" -- "$@"`
  
-@@ -153,6 +154,7 @@
+@@ -153,6 +154,8 @@
  export verbose
  export KEYMAP
  export MODULES
 +export INITRDDIR
++export INITRDTOOLS
  
  # Private, used by 'catenate_cpiogz'.
  export __TMPCPIOGZ
