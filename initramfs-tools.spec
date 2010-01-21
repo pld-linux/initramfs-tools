@@ -43,7 +43,7 @@ Suggests:	mdadm-initramfs
 Suggests:	multipath-tools-initramfs
 Suggests:	openct-initramfs
 Suggests:	opensc-initramfs
-Suggests:	busybox-initrd >= 1.15.3-2
+Suggests:	busybox-initrd >= 1.15.3-3
 Suggests:	cryptsetup-luks-initrd
 Suggests:	device-mapper-initrd
 Suggests:	dmraid-initrd
