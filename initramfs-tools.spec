@@ -7,7 +7,7 @@ Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
 Name:		initramfs-tools
 Version:	0.93.4
-Release:	4
+Release:	5
 License:	Public Domain
 Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
