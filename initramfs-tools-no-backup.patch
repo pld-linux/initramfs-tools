@@ -1,12 +1,13 @@
 --- initramfs-tools/scripts/functions~	2010-01-21 00:57:40.099999937 +0100
 +++ initramfs-tools/scripts/functions	2010-01-21 12:56:28.405912943 +0100
-@@ -78,6 +78,10 @@
+@@ -78,6 +78,11 @@
  			&& echo "$si_x ignored: not alphanumeric or '_' file"
  			continue
  			;;
 +		*~|*.orig|*.rpmsave|*.rpmnew|*.rpmorig|.dpkg-*)
 +			[ "${verbose}" = "y" ] \
 +			&& echo "$si_x ignored: backup or other junk"
++			continue
 +			;;
  		esac
  
