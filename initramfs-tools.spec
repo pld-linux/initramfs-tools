@@ -43,6 +43,19 @@ Suggests:	mdadm-initramfs
 Suggests:	multipath-tools-initramfs
 Suggests:	openct-initramfs
 Suggests:	opensc-initramfs
+Suggests:	busybox-initrd >= 1.15.3-2
+Suggests:	cryptsetup-luks-initrd
+Suggests:	device-mapper-initrd
+Suggests:	dmraid-initrd
+Suggests:	e2fsprogs-initrd
+Suggests:	lvm2-initrd
+Suggests:	mdadm-initrd
+Suggests:	module-init-tools-initrd
+Suggests:	suspend-initrd
+Suggests:	udev-initrd
+Suggests:	util-linux-ng-initrd
+Suggests:	v86d-initrd
+Suggests:	xfsprogs-initrd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
