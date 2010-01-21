@@ -1,0 +1,25 @@
+--- initramfs-tools/mkinitramfs~	2010-01-20 23:44:06.735249166 +0100
++++ initramfs-tools/mkinitramfs	2010-01-21 00:49:57.218999728 +0100
+@@ -202,8 +202,9 @@
+ # symlinks.
+ 
+ # klibc
+-ln -s /usr/lib/klibc/bin/* ${DESTDIR}/bin
+-ln -s /lib/klibc-*.so ${DESTDIR}/lib
++mkdir -p ${DESTDIR}/__KLIBCDIR__
++ln -s /usr/__KLIBCDIR__/klibc/bin/* ${DESTDIR}/bin
++ln -s /__KLIBCDIR__/klibc-*.so ${DESTDIR}/__KLIBCDIR__
+ rm -f ${DESTDIR}/bin/kinit* ${DESTDIR}/bin/gzip
+ 
+ cp -p /usr/share/initramfs-tools/init ${DESTDIR}/init
+--- initramfs-tools/hook-functions~	2010-01-20 23:44:06.730248164 +0100
++++ initramfs-tools/hook-functions	2010-01-21 00:50:47.980252380 +0100
+@@ -260,7 +260,7 @@
+ 
+ 	# find out real rootfs on auto type
+ 	if [ "${FSTYPE}" = "auto" ]; then
+-		eval "$(/usr/lib/klibc/bin/fstype ${root})"
++		eval "$(/usr/__KLIBCDIR__/klibc/bin/fstype ${root})"
+ 	fi
+ 
+ 	# check that fstype rootfs recognition

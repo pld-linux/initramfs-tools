@@ -7,7 +7,7 @@ Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
 Name:		initramfs-tools
 Version:	0.93.4
-Release:	2
+Release:	3
 License:	Public Domain
 Group:		Applications/System
 Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
@@ -17,6 +17,7 @@ Patch1:		%{name}-nobb.patch
 Patch2:		%{name}-gz-modules.patch
 Patch3:		%{name}-less-noise.patch
 Patch4:		%{name}-initrdtools.patch
+Patch5:		%{name}-klibcdir.patch
 URL:		http://git.debian.org/?p=kernel/initramfs-tools.git;a=shortlog
 Requires:	/usr/bin/ldd
 Requires:	/usr/bin/locale
@@ -70,9 +71,13 @@ wbudowany ratunkowy shell do którego można zalogować się przez ssh.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
-sed -i -e 's|lib/klibc|%{_lib}/klibc|g' hook-functions mkinitramfs
+sed -i -e 's|__KLIBCDIR__|%{_lib}|g' hook-functions mkinitramfs
 sed -i -e 's|INITRDDIR="/usr/lib/initrd"|INITRDDIR="/usr/%{_lib}/initrd"|' mkinitramfs
+
+# cleanup backups after patching
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %build
 
