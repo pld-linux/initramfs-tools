@@ -10,7 +10,7 @@ Version:	0.93.4
 Release:	5
 License:	Public Domain
 Group:		Applications/System
-Source0:	http://ftp.de.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
+Source0:	ftp://ftp.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
 # Source0-md5:	06415435a4ba85713ea50b34e212d73c
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-nobb.patch
@@ -36,21 +36,21 @@ Requires:	module-init-tools
 Requires:	mount
 Requires:	udev-initramfs
 Requires:	util-linux-ng
+Suggests:	busybox-initrd >= 1.15.3-3
 Suggests:	cryptsetup-luks-initramfs
+Suggests:	cryptsetup-luks-initrd
+Suggests:	device-mapper-initrd
 Suggests:	dmraid-initramfs >= 1.0.0-0.rc15.3
+Suggests:	dmraid-initrd
+Suggests:	e2fsprogs-initrd
 Suggests:	lvm2-initramfs
+Suggests:	lvm2-initrd
 Suggests:	mdadm-initramfs
+Suggests:	mdadm-initrd
+Suggests:	module-init-tools-initrd
 Suggests:	multipath-tools-initramfs
 Suggests:	openct-initramfs
 Suggests:	opensc-initramfs
-Suggests:	busybox-initrd >= 1.15.3-3
-Suggests:	cryptsetup-luks-initrd
-Suggests:	device-mapper-initrd
-Suggests:	dmraid-initrd
-Suggests:	e2fsprogs-initrd
-Suggests:	lvm2-initrd
-Suggests:	mdadm-initrd
-Suggests:	module-init-tools-initrd
 Suggests:	suspend-initrd
 Suggests:	udev-initrd
 Suggests:	util-linux-ng-initrd
@@ -59,20 +59,18 @@ Suggests:	xfsprogs-initrd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-initramfs-tools is an hookable initramfs generator.
-It can boot on NFS, LVM2, md, LUKS, dmraid, oldstyle devices, ...
-The generated initramfs is generic, but can explicitly be tuned
-for small.
-It is written in POSIX shell, has an "end-user" friendly
-invocation with update-initramfs and the low level mkinitramfs.
-The initramfs uses klibc, comes together with a rescue shell.
-It is possible to ssh into it.
+initramfs-tools is an hookable initramfs generator. It can boot on
+NFS, LVM2, md, LUKS, dmraid, oldstyle devices, ... The generated
+initramfs is generic, but can explicitly be tuned for small. It is
+written in POSIX shell, has an "end-user" friendly invocation with
+update-initramfs and the low level mkinitramfs. The initramfs uses
+klibc, comes together with a rescue shell. It is possible to ssh into
+it.
 
 %description -l pl.UTF-8
-initramfs-tools to generator initramfs.
-Umożliwia bootowanie ze zwykłych urządzeń, LVM2, md, LUKS, dmraid
-czy NFS. Utworzony initramfs jest ogólny, ale można go dostroić
-tak aby był minimalny.
+initramfs-tools to generator initramfs. Umożliwia bootowanie ze
+zwykłych urządzeń, LVM2, md, LUKS, dmraid czy NFS. Utworzony initramfs
+jest ogólny, ale można go dostroić tak aby był minimalny.
 initramfs-tools jest napisany w shellu zgodnym ze standardem POSIX.
 Można go wywoływać poprzez przyjazny dla użytkownika update-initramfs
 i niskopoziomowy mkinitramfs. Utworzony initramfs używa klibc, posiada
