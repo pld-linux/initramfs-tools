@@ -35,7 +35,7 @@ Requires:	klibc-utils-shared >= 1.5.15-3
 Requires:	module-init-tools
 Requires:	mount
 Requires:	udev-initramfs
-Requires:	util-linux-ng
+Requires:	util-linux
 Suggests:	busybox-initrd >= 1.15.3-3
 Suggests:	cryptsetup-luks-initramfs
 Suggests:	cryptsetup-luks-initrd
@@ -53,7 +53,7 @@ Suggests:	openct-initramfs
 Suggests:	opensc-initramfs
 Suggests:	suspend-initrd
 Suggests:	udev-initrd
-Suggests:	util-linux-ng-initrd
+Suggests:	util-linux-initrd
 Suggests:	v86d-initrd
 Suggests:	xfsprogs-initrd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
