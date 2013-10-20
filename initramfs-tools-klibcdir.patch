@@ -1,25 +1,24 @@
---- initramfs-tools/mkinitramfs~	2010-01-20 23:44:06.735249166 +0100
-+++ initramfs-tools/mkinitramfs	2010-01-21 00:49:57.218999728 +0100
-@@ -202,8 +202,9 @@
- # symlinks.
+--- initramfs-tools/hooks/klibc.orig	2013-09-12 15:20:05.000000000 +0200
++++ initramfs-tools/hooks/klibc	2013-10-20 20:54:57.609254142 +0200
+@@ -16,16 +16,17 @@
+ esac
  
  # klibc
--ln -s /usr/lib/klibc/bin/* ${DESTDIR}/bin
--ln -s /lib/klibc-*.so ${DESTDIR}/lib
+-cp -pnL /usr/lib/klibc/bin/* ${DESTDIR}/bin
+-cp -pL /lib/klibc-*.so ${DESTDIR}/lib
 +mkdir -p ${DESTDIR}/__KLIBCDIR__
-+ln -s /usr/__KLIBCDIR__/klibc/bin/* ${DESTDIR}/bin
-+ln -s /__KLIBCDIR__/klibc-*.so ${DESTDIR}/__KLIBCDIR__
- rm -f ${DESTDIR}/bin/kinit* ${DESTDIR}/bin/gzip
- 
- cp -p /usr/share/initramfs-tools/init ${DESTDIR}/init
---- initramfs-tools/hook-functions~	2010-01-20 23:44:06.730248164 +0100
-+++ initramfs-tools/hook-functions	2010-01-21 00:50:47.980252380 +0100
-@@ -260,7 +260,7 @@
- 
- 	# find out real rootfs on auto type
- 	if [ "${FSTYPE}" = "auto" ]; then
--		eval "$(/usr/lib/klibc/bin/fstype ${root})"
-+		eval "$(/usr/__KLIBCDIR__/klibc/bin/fstype ${root})"
++cp -pnL /usr/__KLIBCDIR__/klibc/bin/* ${DESTDIR}/bin
++cp -pL /__KLIBCDIR__/klibc-*.so ${DESTDIR}/__KLIBCDIR__
+ rm -f ${DESTDIR}/bin/kinit* ${DESTDIR}/bin/zcat
+ if [ "${BUSYBOX}" = "n" ] || [ ! -e ${BUSYBOXDIR}/busybox ]; then
+ 	if [ -e ${DESTDIR}/bin/sh.shared ]; then
+ 		# Some platforms build a shared klibc/sh:
+ 		mv ${DESTDIR}/bin/sh.shared ${DESTDIR}/bin/sh
+-	elif [ -e /usr/lib/klibc/bin/sh ]; then
++	elif [ -e /usr/__KLIBCDIR__/klibc/bin/sh ]; then
+ 		# Others build a static version instead:
+-		cp -pL /usr/lib/klibc/bin/sh ${DESTDIR}/bin/sh
++		cp -pL /usr/__KLIBCDIR__/klibc/bin/sh ${DESTDIR}/bin/sh
  	fi
- 
- 	# check that fstype rootfs recognition
+ else
+ 	# Nobody wanted it, so save a tiny bit of space:

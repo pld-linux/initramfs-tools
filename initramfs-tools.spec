@@ -1,17 +1,18 @@
 #
 # TODO:
+#	- check after 0.93.x -> 0.114 update
 #	- clean up Requires (still)
 #	- test cryptroot, dmraid, mdadm, opensc, openct modules
 #
 Summary:	Tools for generating an initramfs
 Summary(pl.UTF-8):	Narzędzia do tworzenia initramfs
 Name:		initramfs-tools
-Version:	0.93.4
-Release:	6
+Version:	0.114
+Release:	0.1
 License:	Public Domain
 Group:		Applications/System
 Source0:	ftp://ftp.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
-# Source0-md5:	06415435a4ba85713ea50b34e212d73c
+# Source0-md5:	d335922c64ab829c7f1692d15fe09dcb
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-nobb.patch
 Patch2:		%{name}-gz-modules.patch
@@ -86,7 +87,7 @@ wbudowany ratunkowy shell do którego można zalogować się przez ssh.
 %patch5 -p1
 %patch6 -p1
 
-sed -i -e 's|__KLIBCDIR__|%{_lib}|g' hook-functions mkinitramfs
+sed -i -e 's|__KLIBCDIR__|%{_lib}|g' hooks/klibc
 sed -i -e 's|INITRDDIR="/usr/lib/initrd"|INITRDDIR="/usr/%{_lib}/initrd"|' mkinitramfs
 
 # cleanup backups after patching
@@ -116,7 +117,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc HACKING docs/*
+%doc HACKING docs/* debian/changelog
 %dir %{_sysconfdir}/initramfs-tools
 %dir %{_sysconfdir}/initramfs-tools/conf.d
 %dir %{_sysconfdir}/initramfs-tools/hooks
@@ -143,7 +144,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/initramfs-tools/modules.d
 %dir %{_datadir}/initramfs-tools/scripts
 %dir %{_datadir}/initramfs-tools/scripts/init-bottom
-%dir %{_datadir}/initramfs-tools/scripts/init-premount
 %dir %{_datadir}/initramfs-tools/scripts/init-top
 %dir %{_datadir}/initramfs-tools/scripts/local-bottom
 %dir %{_datadir}/initramfs-tools/scripts/local-premount
@@ -154,9 +154,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/initramfs-tools/scripts/functions
 %{_datadir}/initramfs-tools/scripts/local
 %{_datadir}/initramfs-tools/scripts/nfs
-%attr(755,root,root) %{_datadir}/initramfs-tools/scripts/init-premount/*
 %attr(755,root,root) %{_datadir}/initramfs-tools/scripts/init-top/*
 %attr(755,root,root) %{_datadir}/initramfs-tools/scripts/local-premount/*
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/mkinitramfs
+%attr(755,root,root) %{_sbindir}/update-initramfs
 %dir /var/lib/initramfs-tools
-%{_mandir}/man[58]/*
+%{_mandir}/man5/initramfs.conf.5*
+%{_mandir}/man5/update-initramfs.conf.5*
+%{_mandir}/man8/initramfs-tools.8*
+%{_mandir}/man8/mkinitramfs.8*
+%{_mandir}/man8/update-initramfs.8*

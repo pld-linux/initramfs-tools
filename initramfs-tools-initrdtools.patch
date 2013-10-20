@@ -15,51 +15,42 @@
  # KEYMAP: [ y | n ]
  #
  # Load a keymap during the initramfs stage.
---- initramfs-tools/mkinitramfs~	2010-01-20 16:06:15.393838115 +0100
-+++ initramfs-tools/mkinitramfs	2010-01-20 17:43:06.685958668 +0100
+--- initramfs-tools/mkinitramfs.orig	2013-10-20 20:28:07.915988361 +0200
++++ initramfs-tools/mkinitramfs	2013-10-20 20:37:00.889299328 +0200
 @@ -10,6 +10,7 @@
- errors_to="2>/dev/null"
- # BUSYBOXDIR="/usr/lib/initramfs-tools/bin/"
- BUSYBOXDIR="/bin"
+ test -e /bin/busybox && BUSYBOXDIR=/bin
+ test -e /usr/lib/initramfs-tools/bin/busybox && BUSYBOXDIR=/usr/lib/initramfs-tools/bin
+ export BUSYBOXDIR
 +INITRDDIR="/usr/lib/initrd"
  
- OPTIONS=`getopt -o d:ko:r:v -n "$0" -- "$@"`
+ OPTIONS=`getopt -o c:d:ko:r:v -n "$0" -- "$@"`
  
-@@ -153,6 +154,8 @@
- export verbose
+@@ -190,6 +191,8 @@
  export KEYMAP
  export MODULES
+ export BUSYBOX
 +export INITRDDIR
 +export INITRDTOOLS
  
  # Private, used by 'catenate_cpiogz'.
  export __TMPCPIOGZ
-@@ -251,7 +251,7 @@
- 	rm -f ${DESTDIR}/bin/sh
- 	rm -f ${DESTDIR}/bin/busybox
- 	copy_exec ${BUSYBOXDIR}/busybox /bin/busybox
--	ln -s ${BUSYBOXDIR}/busybox ${DESTDIR}/bin/sh
-+	copy_exec ${BUSYBOXDIR}/busybox /bin/sh
- fi
+--- initramfs-tools/hook-functions.orig	2013-10-20 20:38:05.389296621 +0200
++++ initramfs-tools/hook-functions	2013-10-20 20:40:48.235956453 +0200
+@@ -123,6 +123,17 @@
+ 	src="${1}"
+ 	target="${2:-$1}"
  
- # Modutils
---- initramfs-tools/hook-functions~	2010-01-20 16:06:15.392838170 +0100
-+++ initramfs-tools/hook-functions	2010-01-20 17:44:33.865833165 +0100
-@@ -119,6 +119,17 @@
- 	local libname dirname
- 
- 	source="${1}"
 +	if [ "${INITRDTOOLS}" = "y" ] || [ "${INITRDTOOLS}" = "Y" ]; then
-+		x="$source"
++		x="$src"
 +		while [[ "$x" = */* ]]; do
 +			[ -e "${INITRDDIR}/${x}" ] && break
 +			x=${x#*/}
 +		done
 +		if [ -e "${INITRDDIR}/${x}" ]; then
-+			source="${INITRDDIR}/${x}"
++			src="${INITRDDIR}/${x}"
 +		fi
 +	fi
 +		
- 	if [ -n "${2}" ]; then
- 		target="${2}"
- 	else
+ 	[ -f "${src}" ] || return 1
+ 
+ 	if [ -d "${DESTDIR}/${target}" ]; then
