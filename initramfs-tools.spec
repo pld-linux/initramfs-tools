@@ -11,7 +11,7 @@ Version:	0.114
 Release:	0.1
 License:	Public Domain
 Group:		Applications/System
-Source0:	ftp://ftp.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
+Source0:	http://ftp.debian.org/debian/pool/main/i/initramfs-tools/%{name}_%{version}.tar.gz
 # Source0-md5:	d335922c64ab829c7f1692d15fe09dcb
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-nobb.patch
