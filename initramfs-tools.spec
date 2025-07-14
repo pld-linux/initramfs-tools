@@ -79,13 +79,13 @@ wbudowany ratunkowy shell do którego można zalogować się przez ssh.
 
 %prep
 %setup -q -n %{name}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
+%patch -P6 -p1
 
 sed -i -e 's|__KLIBCDIR__|%{_lib}|g' hooks/klibc
 sed -i -e 's|INITRDDIR="/usr/lib/initrd"|INITRDDIR="/usr/%{_lib}/initrd"|' mkinitramfs
